@@ -27,20 +27,20 @@ export class UserService {
 
   // 根据id获取用户
   async getUserById(id): Promise<UserEntity> {
-    return await this.userRepository.findOneBy({id: id}) // 0.30 findOne已删除
+    return await this.userRepository.findOneBy({id}) // 0.30 findOne已删除
   }
 
   // 修改用户信息
   async updateUserById(user: Partial<UserEntity>): Promise<UserEntity> {
     const { id } = user
-    const exisUser = await this.userRepository.findOne((id as any))
+    const exisUser = await this.userRepository.findOneBy({id})
     const updateUser = this.userRepository.merge(exisUser, user) // 将两个实体合并
     return await this.userRepository.save(updateUser)
   }
 
   // 删除用户
   async removeUserById(id): Promise<UserEntity> {
-    const exisUser = await this.userRepository.findOne(id)
+    const exisUser = await this.userRepository.findOneBy({id})
     if (!exisUser) {
         throw new HttpException('文章不存在', 401)
     }
